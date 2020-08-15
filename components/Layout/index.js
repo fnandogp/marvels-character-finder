@@ -1,8 +1,9 @@
-import { Layout as AntdLayout } from 'antd';
+import { Layout as AntdLayout, Typography } from 'antd';
 import PropTypes from 'prop-types';
-import styles from '../styles/Layout.module.css';
+import styles from './style.module.css';
 
 const { Header, Footer, Content } = AntdLayout;
+const { Text, Link } = Typography;
 
 function Layout({ children }) {
   return (
@@ -20,12 +21,21 @@ function Layout({ children }) {
       </Content>
 
       <Footer className={styles.footer}>
-        Built by Fernando Pinheiro.
+        <Text>
+          Built by
+          {' '}
+          <Link href="https://github.com/fnandogp" target="_blank">
+            Fernando Pinheiro
+          </Link>
+          .
+        </Text>
         <br />
-        Proudly using
+        <Text>Data provided by</Text>
         {' '}
-        <a href="https://developer.marvel.com">Marvel Public API</a>
+        <Link href="https://developer.marvel.com">Marvel</Link>
         .
+        {' '}
+        <Text>© 2020 MARVEL</Text>
       </Footer>
     </AntdLayout>
   );

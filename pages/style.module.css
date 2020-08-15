@@ -1,0 +1,13 @@
+.card {
+margin-bottom: 1rem;
+}
+
+.cardCover {
+  height: 200px;
+}
+
+.cardCoverImage {
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
