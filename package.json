@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "ahooks": "^2.5.0",
     "antd": "^4.5.4",
     "axios": "^0.19.2",
     "js-md5": "^0.7.3",

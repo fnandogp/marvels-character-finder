@@ -9,7 +9,9 @@ export default async (req, res) => {
 
   const response = await axios.get(
     'http://gateway.marvel.com/v1/public/characters',
-    { params: { ts, apikey: publicKey, hash, limit: 24 } }
+    {
+      params: { ts, apikey: publicKey, hash, limit: 24, ...req.query },
+    }
   );
 
   res.status(200).json({ response: response.data });
