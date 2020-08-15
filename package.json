@@ -8,9 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "antd": "^4.5.4",
     "axios": "^0.19.2",
     "js-md5": "^0.7.3",
     "next": "9.5.2",
+    "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
