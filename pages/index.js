@@ -6,10 +6,8 @@ import {
   Col,
   Input,
   Row,
-  Space,
   Skeleton,
   Pagination,
-  Typography,
   Divider,
 } from 'antd';
 import axios from 'axios';
@@ -21,7 +19,6 @@ import styles from './style.module.css';
 import CharacterAvatar from '../components/CharacterAvatar';
 
 const { Meta } = Card;
-const { Link } = Typography;
 
 const fetcher = (url, query, page, pageSize) => {
   const params = { query, page, pageSize };
@@ -54,7 +51,7 @@ const Characters = () => {
 
   return (
     <Layout>
-      <PageHeader title="Characters Finder" />
+      <PageHeader title="Character Finder" />
 
       <Card>
         <Input.Search
