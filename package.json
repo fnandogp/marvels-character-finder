@@ -8,9 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.2.2",
     "ahooks": "^2.5.0",
     "antd": "^4.5.4",
-    "axios": "^0.19.2",
+    "axios": "^0.18.1",
     "js-md5": "^0.7.3",
     "next": "9.5.2",
     "prop-types": "^15.7.2",

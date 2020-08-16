@@ -1,107 +1,127 @@
+import { useState, useEffect } from 'react';
 import { useDebounce } from 'ahooks';
-import { Card, Col, Input, Row, Space, Skeleton } from 'antd';
+import {
+  PageHeader,
+  Card,
+  Col,
+  Input,
+  Row,
+  Space,
+  Skeleton,
+  Pagination,
+  Typography,
+} from 'antd';
 import axios from 'axios';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
 import useSWR from 'swr';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import styles from './style.module.css';
+import CharacterAvatar from '../components/CharacterAvatar';
 
 const { Meta } = Card;
+const { Link } = Typography;
 
-const fetcher = (url, query = null) => {
-  const params = {};
-  if (query) {
-    params.nameStartsWith = query;
-  }
+const fetcher = (url, query, page, pageSize) => {
+  const params = { query, page, pageSize };
 
-  return axios
-    .get(url, { params })
-    .then((res) => res.data.response.data.results);
+  return axios.get(url, { params }).then((res) => res.data.response);
 };
 
-// export async function getServerSideProps() {
-// const chars = await fetcher('/api/characters');
-// return { props: { chars } };
-// }
-
-const Home = ({ chars: initialData }) => {
-  const [query, setQuery] = useState('');
+const Characters = () => {
+  const router = useRouter();
+  const [query, setQuery] = useState(router.query.query || '');
+  const [page, setPage] = useState(router.query.page || 1);
+  const [pageSize, setPageSize] = useState(router.query.pageSize || 20);
   const debouncedQuery = useDebounce(query);
 
-  const { data: chars } = useSWR(['/api/characters', debouncedQuery], fetcher, {
-    initialData,
-  });
+  const { data } = useSWR(
+    ['/api/characters', debouncedQuery, page, pageSize],
+    fetcher
+  );
 
-  if (!chars) {
-    return (
-      <Row gutter={16}>
-        <Col span={6}>
-          <Skeleton active avatar paragraph={{ rows: 4 }} />
-        </Col>
-        <Col span={6}>
-          <Skeleton active avatar paragraph={{ rows: 4 }} />
-        </Col>
-        <Col span={6}>
-          <Skeleton active avatar paragraph={{ rows: 4 }} />
-        </Col>
-        <Col span={6}>
-          <Skeleton active avatar paragraph={{ rows: 4 }} />
-        </Col>
-      </Row>
-    );
-  }
+  useEffect(() => {
+    router.push({ query: { query: debouncedQuery, page, pageSize } });
+  }, [debouncedQuery, page, pageSize]);
+
+  const handlePaginationChange = (newPage, newPageSize) => {
+    setPage(newPage);
+    setPageSize(newPageSize);
+  };
+
+  const characters = data?.results || [];
 
   return (
     <Layout>
-      <Space direction="vertical" size="large">
-        <Input
-          placeholder="who are you looking for?"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-        />
+      <PageHeader title="Characters Finder" />
 
-        <Row gutter={16}>
-          {chars.map((char) => {
-            return (
-              <Col key={char.id} xs={24} sm={12} md={8} lg={6} xl={4}>
-                <Card
-                  hoverable
-                  className={styles.card}
-                  cover={(
-                    <div className={styles.cardCover}>
-                      <div
-                        className={styles.cardCoverImage}
-                        style={{
-                          backgroundImage: `url('${char.thumbnail.path}.${char.thumbnail.extension}')`,
-                          // backgroundImage: "url('/marvel-logo.svg')"
-                        }}
-                      />
-                    </div>
-                  )}
-                >
-                  <Meta title={char.name} />
-                </Card>
-              </Col>
-            );
-          })}
-        </Row>
-      </Space>
+      <Card>
+        <Space direction="vertical" size="large">
+          <Input.Search
+            placeholder="who are you looking for?"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+
+          {characters.length === 0 && (
+            <Row gutter={[16, 16]}>
+              {[...Array(24).keys()].map((i) => (
+                <Col key={i} xs={24} sm={12} md={8} lg={6} xl={4}>
+                  <Skeleton active avatar paragraph={{ rows: 4 }} />
+                </Col>
+              ))}
+            </Row>
+          )}
+
+          {characters.length > 0 && (
+            <>
+              <Row gutter={[16, 16]}>
+                {characters.map((character) => {
+                  return (
+                    <Col
+                      key={character.id}
+                      xs={24}
+                      sm={12}
+                      md={8}
+                      lg={6}
+                      xl={4}
+                    >
+                      <NextLink href="/[id]" as={`/${character.id}`} passHref>
+                        <Link>
+                          <Card
+                            className={styles.card}
+                            hoverable
+                            cover={(
+                              <CharacterAvatar
+                                url={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+                                size={300}
+                              />
+                            )}
+                          >
+                            <Meta title={character.name} />
+                          </Card>
+                        </Link>
+                      </NextLink>
+                    </Col>
+                  );
+                })}
+              </Row>
+
+              <Pagination
+                defaultCurrent={page}
+                pageSize={pageSize}
+                showQuickJumper
+                total={data.total}
+                onChange={handlePaginationChange}
+              />
+            </>
+          )}
+        </Space>
+      </Card>
     </Layout>
   );
 };
 
-Home.propTypes = {
-  chars: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string,
-      thumbnail: PropTypes.shape({
-        path: PropTypes.string.isRequired,
-        extension: PropTypes.string.isRequired,
-      }),
-    })
-  ).isRequired,
-};
+Characters.propTypes = {};
 
-export default Home;
+export default Characters;

@@ -1,19 +1,24 @@
 import { Layout as AntdLayout, Typography } from 'antd';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import styles from './style.module.css';
 
 const { Header, Footer, Content } = AntdLayout;
 const { Text, Link } = Typography;
 
 function Layout({ children }) {
+  const router = useRouter();
+
   return (
     <AntdLayout>
       <Header className={styles.header}>
-        <img
-          className={styles.logo}
-          src="/marvel-logo.svg"
-          alt="Marvel Character Finder"
-        />
+        <Link href="/" onClick={() => router.push('/')}>
+          <img
+            className={styles.logo}
+            src="/marvel-logo.svg"
+            alt="Marvel Character Finder"
+          />
+        </Link>
       </Header>
 
       <Content>
@@ -32,8 +37,10 @@ function Layout({ children }) {
         <br />
         <Text>Data provided by</Text>
         {' '}
-        <Link href="https://developer.marvel.com">Marvel</Link>
-        .
+        <Link href="https://developer.marvel.com" target="_blank">
+          Marvel
+        </Link>
+        . 
         {' '}
         <Text>© 2020 MARVEL</Text>
       </Footer>
