@@ -1,5 +1,14 @@
 // import styles from './style.module.css';
-import { Card, Col, List, PageHeader, Row, Spin, Typography } from 'antd';
+import {
+  Card,
+  Col,
+  List,
+  PageHeader,
+  Row,
+  Spin,
+  Typography,
+  Divider,
+} from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -24,9 +33,12 @@ const CharacterView = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  if (!id) return <CharacterViewLoading />;
+  const { data: character } = useSWR(
+    id ? `/api/characters/${id}` : null,
+    fetcher
+  );
 
-  const { data: character } = useSWR(`/api/characters/${id}`, fetcher);
+  if (!id) return <CharacterViewLoading />;
 
   if (!character) return <CharacterViewLoading />;
 
@@ -63,13 +75,17 @@ const CharacterView = () => {
         {collections.map((collection) => (
           <Col key={collection.name} xs={24} lg={6}>
             <Card>
-              <Title level={4}>{collection.name}</Title>
+              <Title level={4}>
+                {`${collection.name} (${collection.items.length})`}
+              </Title>
 
-              {!collection.items.lenght && <Text>- none -</Text>}
+              <Divider />
+
+              {collection.items.length === 0 && <Text>- none -</Text>}
 
               <List>
                 {collection.items.map((item) => {
-                  return <List.Item>{item.name}</List.Item>;
+                  return <List.Item key={item.name}>{item.name}</List.Item>;
                 })}
               </List>
             </Card>

@@ -10,6 +10,7 @@ import {
   Skeleton,
   Pagination,
   Typography,
+  Divider,
 } from 'antd';
 import axios from 'axios';
 import useSWR from 'swr';
@@ -87,7 +88,7 @@ const Characters = () => {
                       xl={4}
                     >
                       <NextLink href="/[id]" as={`/${character.id}`} passHref>
-                        <Link>
+                        <a>
                           <Card
                             className={styles.card}
                             hoverable
@@ -100,12 +101,14 @@ const Characters = () => {
                           >
                             <Meta title={character.name} />
                           </Card>
-                        </Link>
+                        </a>
                       </NextLink>
                     </Col>
                   );
                 })}
               </Row>
+
+              <Divider />
 
               <Pagination
                 defaultCurrent={page}
@@ -113,6 +116,7 @@ const Characters = () => {
                 showQuickJumper
                 total={data.total}
                 onChange={handlePaginationChange}
+                style={{ textAlign: 'center' }}
               />
             </>
           )}
