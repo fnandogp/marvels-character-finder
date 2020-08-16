@@ -57,70 +57,65 @@ const Characters = () => {
       <PageHeader title="Characters Finder" />
 
       <Card>
-        <Space direction="vertical" size="large">
-          <Input.Search
-            placeholder="who are you looking for?"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
+        <Input.Search
+          placeholder="Who are you looking for?"
+          value={query}
+          allowClear
+          onChange={(event) => setQuery(event.target.value)}
+          style={{ maxWidth: '20rem' }}
+        />
 
-          {characters.length === 0 && (
+        <Divider />
+
+        {characters.length === 0 && (
+          <Row gutter={[16, 16]}>
+            {[...Array(24).keys()].map((i) => (
+              <Col key={i} xs={24} sm={12} md={8} lg={6} xl={4}>
+                <Skeleton active avatar paragraph={{ rows: 4 }} />
+              </Col>
+            ))}
+          </Row>
+        )}
+
+        {characters.length > 0 && (
+          <>
             <Row gutter={[16, 16]}>
-              {[...Array(24).keys()].map((i) => (
-                <Col key={i} xs={24} sm={12} md={8} lg={6} xl={4}>
-                  <Skeleton active avatar paragraph={{ rows: 4 }} />
-                </Col>
-              ))}
+              {characters.map((character) => {
+                return (
+                  <Col key={character.id} xs={24} sm={12} md={8} lg={6} xl={4}>
+                    <NextLink href="/[id]" as={`/${character.id}`} passHref>
+                      <a>
+                        <Card
+                          className={styles.card}
+                          hoverable
+                          cover={(
+                            <CharacterAvatar
+                              url={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+                              size={300}
+                            />
+                          )}
+                        >
+                          <Meta title={character.name} />
+                        </Card>
+                      </a>
+                    </NextLink>
+                  </Col>
+                );
+              })}
             </Row>
-          )}
 
-          {characters.length > 0 && (
-            <>
-              <Row gutter={[16, 16]}>
-                {characters.map((character) => {
-                  return (
-                    <Col
-                      key={character.id}
-                      xs={24}
-                      sm={12}
-                      md={8}
-                      lg={6}
-                      xl={4}
-                    >
-                      <NextLink href="/[id]" as={`/${character.id}`} passHref>
-                        <a>
-                          <Card
-                            className={styles.card}
-                            hoverable
-                            cover={(
-                              <CharacterAvatar
-                                url={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-                                size={300}
-                              />
-                            )}
-                          >
-                            <Meta title={character.name} />
-                          </Card>
-                        </a>
-                      </NextLink>
-                    </Col>
-                  );
-                })}
-              </Row>
+            <Divider />
 
-              <Divider />
-
-              <Pagination
-                defaultCurrent={page}
-                pageSize={pageSize}
-                showQuickJumper
-                total={data.total}
-                onChange={handlePaginationChange}
-                style={{ textAlign: 'center' }}
-              />
-            </>
-          )}
-        </Space>
+            <Pagination
+              defaultCurrent={page}
+              pageSize={pageSize}
+              showQuickJumper
+              total={data.total}
+              onChange={handlePaginationChange}
+              style={{ textAlign: 'center' }}
+            />
+          </>
+        )}
       </Card>
     </Layout>
   );

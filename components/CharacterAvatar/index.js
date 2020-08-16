@@ -13,13 +13,18 @@ function CharacterAvatar({ url, size }) {
         shape="square"
         size={size}
         icon={<UserOutlined />}
-        style={{ maxWidth: '100%' }}
+        style={{ minWidth: '100%', maxWidth: '100%' }}
       />
     );
   }
 
   return (
-    <Avatar shape="square" size={size} src={url} style={{ maxWidth: '100%' }} />
+    <Avatar
+      shape="square"
+      size={size}
+      src={url}
+      style={{ minWidth: '100%', maxWidth: '100%' }}
+    />
   );
 }
 
