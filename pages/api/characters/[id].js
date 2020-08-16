@@ -7,5 +7,5 @@ export default async (req, res) => {
 
   const response = await api.get(`/characters/${id}`);
 
-  res.status(200).json({ response: response.data.data });
+  res.status(200).json(response.data.data);
 };

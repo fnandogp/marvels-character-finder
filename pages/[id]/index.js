@@ -18,7 +18,7 @@ import CharacterAvatar from '../../components/CharacterAvatar';
 const { Paragraph, Text, Title } = Typography;
 
 const fetcher = (url) => {
-  return axios.get(url).then((res) => res.data.response.results[0]);
+  return axios.get(url).then((res) => res.data.results[0]);
 };
 
 const CharacterViewLoading = () => (

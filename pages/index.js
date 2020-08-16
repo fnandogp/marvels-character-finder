@@ -23,7 +23,7 @@ const { Meta } = Card;
 const fetcher = (url, query, page, pageSize) => {
   const params = { query, page, pageSize };
 
-  return axios.get(url, { params }).then((res) => res.data.response);
+  return axios.get(url, { params }).then((res) => res.data);
 };
 
 const Characters = () => {
