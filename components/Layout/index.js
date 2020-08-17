@@ -1,6 +1,7 @@
 import { Layout as AntdLayout, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import styles from './style.module.css';
 
 const { Header, Footer, Content } = AntdLayout;
@@ -11,6 +12,12 @@ function Layout({ children }) {
 
   return (
     <AntdLayout>
+      <Head>
+        <title> Character Finder - Marvel </title>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+      </Head>
+
       <Header className={styles.header}>
         <Link href="/" onClick={() => router.push('/')}>
           <img
