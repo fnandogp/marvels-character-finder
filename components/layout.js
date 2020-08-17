@@ -1,14 +1,14 @@
-import { Layout as AntdLayout, Typography } from 'antd';
+import { Layout as AntdLayout, Typography, Menu } from 'antd';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
+import NextLink from 'next/link';
 import Head from 'next/head';
-import styles from './style.module.css';
+import useUser from '../hooks/useUser';
 
 const { Header, Footer, Content } = AntdLayout;
 const { Text, Link } = Typography;
 
 function Layout({ children }) {
-  const router = useRouter();
+  const user = useUser();
 
   return (
     <AntdLayout>
@@ -18,21 +18,39 @@ function Layout({ children }) {
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
 
-      <Header className={styles.header}>
-        <Link href="/" onClick={() => router.push('/')}>
-          <img
-            className={styles.logo}
-            src="/marvel-logo.svg"
-            alt="Marvel Character Finder"
-          />
-        </Link>
+      <Header>
+        <div style={{ float: 'left' }}>
+          <NextLink href="/">
+            <a>
+              <img
+                style={{ height: '40px' }}
+                src="/marvel-logo.svg"
+                alt="Marvel Character Finder"
+              />
+            </a>
+          </NextLink>
+        </div>
+
+        <Menu theme="dark" mode="horizontal" style={{ float: 'right' }}>
+          {user && (
+            <Menu.Item key="logout">
+              <a href="/api/logout">Logout</a>
+            </Menu.Item>
+          )}
+
+          {!user && (
+            <Menu.Item key="logout">
+              <NextLink href="/login">
+                <a>Login</a>
+              </NextLink>
+            </Menu.Item>
+          )}
+        </Menu>
       </Header>
 
-      <Content>
-        <div className={styles.content}>{children}</div>
-      </Content>
+      <Content style={{ margin: '0 50px' }}>{children}</Content>
 
-      <Footer className={styles.footer}>
+      <Footer style={{ textAlign: 'center' }}>
         <Text>
           Built by
           {' '}

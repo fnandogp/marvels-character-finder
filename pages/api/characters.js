@@ -1,6 +1,13 @@
-import api from '../../services/api';
+import api from '../../utils/api';
+import {getSession} from '../../utils/iron';
 
 export default async (req, res) => {
+  const session = await getSession(req)
+  if(!session) 
+  {
+    return res.status(403).json({ message: 'Forbidden.' });
+  }
+
   if (req.method !== 'GET') {
     return res.status(404).json({ message: 'Not Found.' });
   }

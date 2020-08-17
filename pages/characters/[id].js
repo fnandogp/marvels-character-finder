@@ -12,8 +12,9 @@ import {
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import Layout from '../../components/Layout';
-import CharacterAvatar from '../../components/CharacterAvatar';
+import Layout from '../../components/layout';
+import CharacterAvatar from '../../components/character-avatar';
+import useUser from '../../hooks/useUser';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -30,11 +31,12 @@ const CharacterViewLoading = () => (
 );
 
 const CharacterView = () => {
+  const user = useUser({ redirectTo: '/login' });
   const router = useRouter();
   const { id } = router.query;
 
   const { data: character } = useSWR(
-    id ? `/api/characters/${id}` : null,
+    user && id ? `/api/characters/${id}` : null,
     fetcher
   );
 

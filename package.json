@@ -9,16 +9,19 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
+    "@hapi/iron": "^6.0.0",
+    "@magic-sdk/admin": "^1.2.2",
     "ahooks": "^2.5.0",
     "antd": "^4.5.4",
     "axios": "^0.18.1",
+    "cookie": "^0.4.1",
     "js-md5": "^0.7.3",
+    "magic-sdk": "^2.4.7",
     "next": "9.5.2",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "swr": "^0.3.0",
-    "unfetch": "^4.1.0"
+    "swr": "^0.3.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
