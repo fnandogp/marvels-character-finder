@@ -1,6 +1,10 @@
 import api from '../../services/api';
 
 export default async (req, res) => {
+  if (req.method !== 'GET') {
+    return res.status(404).json({ message: 'Not Found.' });
+  }
+
   const page = req.query?.page || 1;
   const pageSize = req.query?.pageSize || 20;
   const query = req.query?.query;
@@ -16,5 +20,5 @@ export default async (req, res) => {
 
   const response = await api.get('characters', { params });
 
-  res.status(200).json(response.data.data);
+  return res.status(200).json(response.data.data);
 };
