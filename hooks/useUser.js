@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import useSWR from 'swr';
 import axios from 'axios';
 
@@ -7,7 +7,6 @@ const fetcher = (url) =>
   axios.get(url).then((res) => ({ user: res.data.user || null }));
 
 export default function useUser({ redirectTo, redirectIfFound } = {}) {
-  const router = useRouter();
   const { data, error } = useSWR('/api/user', fetcher);
   const user = data?.user;
   const finished = Boolean(data);
@@ -22,7 +21,8 @@ export default function useUser({ redirectTo, redirectIfFound } = {}) {
       // If redirectIfFound is also set, redirect if the user was found.
       (redirectIfFound && hasUser)
     ) {
-      router.push(redirectTo);
+      window.location = '/login'; // for some reason router.push is not working
+      // Router.push(redirectTo);
     }
   }, [redirectTo, redirectIfFound, finished, hasUser]);
 
